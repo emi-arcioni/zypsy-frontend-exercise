@@ -11,11 +11,12 @@ function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const { activeCategory, categories } = useCategory();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           `http://localhost:9000/categories/${activeCategory?.id}/posts`
         );
@@ -38,30 +39,32 @@ function App() {
         {loading ? (
           <Loading />
         ) : (
-          <div className="border border-gray-300 rounded">
-            <h3 className="font-semibold text-gray-600 border-b border-gray-300 px-6 py-4">
-              Found {posts.length} posts of "{activeCategory?.name}"
-            </h3>
-            {posts.map((post, index) => (
-              <div
-                key={post.id}
-                className="m-6 [&:not(:last-child)]:pb-3 [&:not(:last-child)]:border-b border-gray-300"
-              >
-                <h4 className="font-bold mb-4">{post.date}</h4>
-                <p className="text-gray-700 mb-4">{post.description}</p>
-                <div className="md:flex md:flex-row">
-                  {post.categories.map((categoryId, i) => (
-                    <CategoryButton
-                      key={categoryId}
-                      category={categories.find(
-                        (category) => category.id === categoryId
-                      )}
-                    />
-                  ))}
+          activeCategory && (
+            <div className="border border-gray-300 rounded">
+              <h3 className="font-semibold text-gray-600 border-b border-gray-300 px-6 py-4">
+                Found {posts.length} posts of "{activeCategory?.name}"
+              </h3>
+              {posts.map((post, index) => (
+                <div
+                  key={post.id}
+                  className="m-6 [&:not(:last-child)]:pb-3 [&:not(:last-child)]:border-b border-gray-300"
+                >
+                  <h4 className="font-bold mb-4">{post.date}</h4>
+                  <p className="text-gray-700 mb-4">{post.description}</p>
+                  <div className="md:flex md:flex-row">
+                    {post.categories.map((categoryId, i) => (
+                      <CategoryButton
+                        key={categoryId}
+                        category={categories.find(
+                          (category) => category.id === categoryId
+                        )}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )
         )}
       </main>
     </div>

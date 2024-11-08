@@ -16,11 +16,13 @@ export const CategoryContext = createContext<{
   setActiveCategory: Dispatch<SetStateAction<Category | undefined>>;
   categories: Category[];
   loadingCategories: boolean;
+  switchFavorite: (category?: Category) => void;
 }>({
   activeCategory: undefined,
   setActiveCategory: () => {},
   categories: [],
   loadingCategories: true,
+  switchFavorite: () => {},
 });
 
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
@@ -31,12 +33,34 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const switchFavorite = async (category?: Category) => {
+    if (!category) return;
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/categories/${category.id}`,
+        {
+          id: category.id,
+          name: category.name,
+          favorite: !category.favorite,
+        }
+      );
+      setCategories((categories) =>
+        categories.map((c) =>
+          c.id === category.id ? { ...response.data } : { ...c }
+        )
+      );
+    } catch (err) {
+      console.log("Favorite couldn't be updated");
+    }
+  };
+
   const categoryContextValue = useMemo(
     () => ({
       activeCategory,
       setActiveCategory,
       categories,
       loadingCategories: loading,
+      switchFavorite,
     }),
     [activeCategory, categories, loading]
   );
