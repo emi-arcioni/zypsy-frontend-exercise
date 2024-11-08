@@ -20,21 +20,24 @@ export const CategoryContext = createContext<{
   activeCategory: undefined,
   setActiveCategory: () => {},
   categories: [],
-  loadingCategories: true
+  loadingCategories: true,
 });
 
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const query = new URLSearchParams(useLocation().search);
   const navigate = useNavigate();
-  const [categoryId, setCategoryId] = useState<string>(
-    query.get("categoryId") || ""
-  );
+  const categoryId = query.get("categoryId");
   const [activeCategory, setActiveCategory] = useState<Category | undefined>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   const categoryContextValue = useMemo(
-    () => ({ activeCategory, setActiveCategory, categories, loadingCategories: loading }),
+    () => ({
+      activeCategory,
+      setActiveCategory,
+      categories,
+      loadingCategories: loading,
+    }),
     [activeCategory, categories, loading]
   );
 
@@ -54,20 +57,17 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (categories.length) {
-      let category;
-      if (categoryId) {
+      let category: Category | undefined = categories[0];
+      if (categoryId)
         category = categories.find((category) => category.id === categoryId);
-      } else {
-        category = categories[0];
-        setCategoryId(categories[0].id);
-      }
 
       setActiveCategory(category);
     }
   }, [categories, categoryId]);
 
   useEffect(() => {
-    navigate(`?categoryId=${activeCategory?.id}`, { replace: true });
+    if (activeCategory)
+      navigate(`?categoryId=${activeCategory?.id}`, { replace: true });
   }, [activeCategory, navigate]);
 
   return (
