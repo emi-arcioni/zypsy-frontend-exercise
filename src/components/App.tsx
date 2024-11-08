@@ -1,19 +1,33 @@
-import React, { useState } from "react";
-import Button from "./Button";
+import React, { useEffect, useState } from "react";
+import CategoryButton from "./CategoryButton";
 import MenuToggle from "./MenuToggle";
 import Menu from "./Menu";
+import useCategory from "../hooks/useCategory";
+import axios from "axios";
+import { Post } from "../types/Post.type";
+import Loading from "./Loading";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const { activeCategory, categories } = useCategory();
+  const [loading, setLoading] = useState(true);
 
-  const posts = [
-    {
-      date: "Thursday, May 23rd 2024",
-      categories: ["Cooking", "Latest Tech News", "Investing"],
-      content:
-        "Cooking delicious and nutritious meals on weeknights can often feel like a daunting task. However, with a few simple strategies, it’s possible to whip up satisfying dinners in no time. One key is to plan ahead and keep a stock of versatile ingredients like pasta, canned tomatoes, and frozen vegetables. These staples can be quickly transformed into a variety of dishes, from hearty pasta bakes to stir-fries.",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/categories/${activeCategory?.id}/posts`
+        );
+        setPosts(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.log("Posts couldn't be loaded");
+      }
+    };
+
+    if (activeCategory) fetchData();
+  }, [activeCategory]);
 
   return (
     <div className="md:flex min-h-screen">
@@ -21,25 +35,34 @@ function App() {
       <Menu isOpen={isOpen} />
 
       <main className="md:w-3/4 px-4 py-14 border-gray-300 md:border-l">
-        <div className="border border-gray-300 rounded">
-          <h3 className="font-semibold text-gray-600 border-b border-gray-300 px-6 py-4">
-            Found {posts.length} posts of “Cooking”
-          </h3>
-          {posts.map((post, index) => (
-            <div
-              key={index}
-              className="m-6 [&:not(:last-child)]:pb-3 [&:not(:last-child)]:border-b border-gray-300"
-            >
-              <h4 className="font-bold mb-4">{post.date}</h4>
-              <p className="text-gray-700 mb-4">{post.content}</p>
-              <div className="md:flex md:flex-row">
-                {post.categories.map((category, i) => (
-                  <Button key={i}>{category}</Button>
-                ))}
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className="border border-gray-300 rounded">
+            <h3 className="font-semibold text-gray-600 border-b border-gray-300 px-6 py-4">
+              Found {posts.length} posts of "{activeCategory?.name}"
+            </h3>
+            {posts.map((post, index) => (
+              <div
+                key={post.id}
+                className="m-6 [&:not(:last-child)]:pb-3 [&:not(:last-child)]:border-b border-gray-300"
+              >
+                <h4 className="font-bold mb-4">{post.date}</h4>
+                <p className="text-gray-700 mb-4">{post.description}</p>
+                <div className="md:flex md:flex-row">
+                  {post.categories.map((categoryId, i) => (
+                    <CategoryButton
+                      key={categoryId}
+                      category={categories.find(
+                        (category) => category.id === categoryId
+                      )}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

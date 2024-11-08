@@ -1,10 +1,22 @@
 import React from "react";
+import { Category } from "../types/Category.type";
+import useCategory from "../hooks/useCategory";
 
-function Button({ children }: { children: React.ReactNode }) {
+function CategoryButton({ category }: { category?: Category }) {
+  const { activeCategory, setActiveCategory } = useCategory();
+
+  const selected = category?.id === activeCategory?.id;
   return (
     <div className="relative inline-flex items-center mr-4 mb-4">
-      <button className="bg-green-950 font-semibold text-white py-2 pl-5 pr-12 rounded text-left flex justify-between items-center">
-        {children}
+      <button
+        onClick={() => setActiveCategory(category)}
+        className={`${
+          selected
+            ? "border border-green-950 bg-white text-black"
+            : "bg-green-950 text-white"
+        } font-semibold py-2 pl-5 pr-12 rounded text-left flex justify-between items-center`}
+      >
+        {category?.name}
       </button>
       <button className="absolute z-1 right-4 top-1/2 transform -translate-y-1/2 text-white">
         <svg
@@ -12,8 +24,7 @@ function Button({ children }: { children: React.ReactNode }) {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-5"
+          className={`size-5 ${selected ? "stroke-green-950" : "stroke-white"}`}
         >
           <path
             strokeLinecap="round"
@@ -26,4 +37,4 @@ function Button({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default Button;
+export default CategoryButton;

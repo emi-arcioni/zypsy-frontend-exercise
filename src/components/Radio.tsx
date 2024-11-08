@@ -1,6 +1,12 @@
 import React from "react";
 
-function Radio({ children }: { children: React.ReactNode }) {
+function Radio({
+  children,
+  checked = false,
+}: {
+  children: React.ReactNode;
+  checked?: boolean;
+}) {
   return (
     <label className="flex items-center space-x-1">
       <input
@@ -8,7 +14,7 @@ function Radio({ children }: { children: React.ReactNode }) {
         name="category"
         value="all"
         className="form-radio"
-        defaultChecked
+        defaultChecked={checked}
       />
       <span>{children}</span>
     </label>
