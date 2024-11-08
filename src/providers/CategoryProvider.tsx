@@ -16,13 +16,13 @@ export const CategoryContext = createContext<{
   setActiveCategory: Dispatch<SetStateAction<Category | undefined>>;
   categories: Category[];
   loadingCategories: boolean;
-  switchFavorite: (category?: Category) => void;
+  toggleFavorite: (category?: Category) => void;
 }>({
   activeCategory: undefined,
   setActiveCategory: () => {},
   categories: [],
   loadingCategories: true,
-  switchFavorite: () => {},
+  toggleFavorite: () => {},
 });
 
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
@@ -33,7 +33,7 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const switchFavorite = async (category?: Category) => {
+  const toggleFavorite = async (category?: Category) => {
     if (!category) return;
     try {
       const response = await axios.put(
@@ -60,7 +60,7 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
       setActiveCategory,
       categories,
       loadingCategories: loading,
-      switchFavorite,
+      toggleFavorite,
     }),
     [activeCategory, categories, loading]
   );

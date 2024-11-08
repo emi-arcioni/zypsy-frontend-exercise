@@ -3,7 +3,7 @@ import { Category } from "../types/Category.type";
 import useCategory from "../hooks/useCategory";
 
 function CategoryButton({ category }: { category?: Category }) {
-  const { activeCategory, setActiveCategory, switchFavorite } = useCategory();
+  const { activeCategory, setActiveCategory, toggleFavorite } = useCategory();
 
   const selected = category?.id === activeCategory?.id;
 
@@ -31,7 +31,7 @@ function CategoryButton({ category }: { category?: Category }) {
         {category?.name}
       </button>
       <button
-        onClick={() => switchFavorite(category)}
+        onClick={() => toggleFavorite(category)}
         className="absolute z-1 right-4 top-1/2 transform -translate-y-1/2 text-white"
       >
         <svg
