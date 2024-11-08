@@ -37,7 +37,7 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
     if (!category) return;
     try {
       const response = await axios.put(
-        `http://localhost:9000/categories/${category.id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/categories/${category.id}`,
         {
           id: category.id,
           name: category.name,
@@ -68,7 +68,7 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/categories");
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/categories`);
         setCategories(response.data);
         setLoading(false);
       } catch (err) {

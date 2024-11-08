@@ -18,7 +18,7 @@ function App() {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:9000/categories/${activeCategory?.id}/posts`
+          `${process.env.REACT_APP_BACKEND_URL}/categories/${activeCategory?.id}/posts`
         );
         setPosts(response.data);
         setLoading(false);
