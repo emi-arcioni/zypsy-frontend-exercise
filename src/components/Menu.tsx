@@ -20,7 +20,7 @@ function Menu({ isOpen }: { isOpen: boolean }) {
 
   return (
     <aside
-      className={`fixed transition-transform transform z-10 h-full bg-white w-full md:translate-x-0 md:relative md:w-1/4 ${
+      className={`fixed transition-transform transform z-10 h-full bg-white w-full md:translate-x-0 md:relative md:w-1/3 lg:w-1/4 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >

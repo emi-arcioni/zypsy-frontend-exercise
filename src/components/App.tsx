@@ -28,6 +28,8 @@ function App() {
     };
 
     if (activeCategory) fetchData();
+
+    setIsOpen(false);
   }, [activeCategory]);
 
   return (

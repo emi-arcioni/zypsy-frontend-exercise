@@ -21,11 +21,12 @@ function CategoryButton({ category }: { category?: Category }) {
     <div className="relative inline-flex items-center mr-4 mb-4">
       <button
         onClick={() => setActiveCategory(category)}
+        disabled={selected}
         className={`${
           selected
-            ? "border border-green-950 bg-white text-black"
-            : "bg-green-950 text-white"
-        } font-semibold py-2 pl-5 pr-12 rounded text-left flex justify-between items-center`}
+            ? "bg-white text-black"
+            : "bg-green-950 text-white hover:bg-green-800"
+        } border border-green-950 font-semibold py-2 pl-5 pr-12 rounded text-left flex justify-between items-center`}
       >
         {category?.name}
       </button>
@@ -38,7 +39,7 @@ function CategoryButton({ category }: { category?: Category }) {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
-          className={`size-5 ${getClassName(
+          className={`size-5 hover:fill-gray-200 ${getClassName(
             category?.favorite || false,
             selected
           )}`}

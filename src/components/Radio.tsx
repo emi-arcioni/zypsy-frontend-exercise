@@ -10,7 +10,7 @@ function Radio({
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }) {
   return (
-    <label className="flex items-center space-x-1">
+    <label className="flex items-center space-x-1 cursor-pointer">
       <input
         type="radio"
         name="category"
