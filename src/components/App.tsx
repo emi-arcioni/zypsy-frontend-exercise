@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
 import CategoryButton from "./CategoryButton";
 import MenuToggle from "./MenuToggle";
 import Menu from "./Menu";
@@ -8,6 +10,7 @@ import { Post } from "../types/Post.type";
 import Loading from "./Loading";
 
 function App() {
+  dayjs.extend(advancedFormat);
   const [isOpen, setIsOpen] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const { activeCategory, categories } = useCategory();
@@ -20,7 +23,11 @@ function App() {
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/categories/${activeCategory?.id}/posts`
         );
-        setPosts(response.data);
+        const sortedPosts = response.data.sort(
+          (a: Post, b: Post) =>
+            dayjs(a.date).toDate().getTime() - dayjs(b.date).toDate().getTime()
+        );
+        setPosts(sortedPosts);
         setLoading(false);
       } catch (err) {
         console.log("Posts couldn't be loaded");
@@ -51,7 +58,9 @@ function App() {
                   key={post.id}
                   className="m-6 [&:not(:last-child)]:pb-3 [&:not(:last-child)]:border-b border-gray-300"
                 >
-                  <h4 className="font-bold mb-4">{post.date}</h4>
+                  <h4 className="font-bold mb-4">
+                    {dayjs(post.date).format("dddd, MMMM Do YYYY")}
+                  </h4>
                   <p className="text-gray-700 mb-4">{post.description}</p>
                   <div className="md:flex md:flex-row">
                     {post.categories.map((categoryId, i) => (
