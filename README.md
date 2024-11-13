@@ -1,4 +1,5 @@
 # Zypsy Frontend Exercise
+
 by Emilio Arcioni
 
 ## Considerations
@@ -10,11 +11,13 @@ by Emilio Arcioni
 - Due to time constraints, testing is minimal, with only a basic `<App />` test included.
 
 ---
+
 ## Running Instructions
 
 Copy the file `.env.example` to `.env.local`, and feel free to modify the value of `REACT_APP_BACKEND_URL` to match the value where the backend server is running.
 
 #### Install dependencies
+
 ```bash
 $ npm install
 ```
@@ -24,10 +27,15 @@ $ npm install
 ```bash
 $ npm start
 ```
+
 Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits. You will also see any lint errors in the console.
 
 #### Run tests
+
 ```bash
 $ npm test
 ```
+
+### Important
+In order for the frontend to work properly, the backend app must be running at http://localhost:9000 (or at the URL specified by the `REACT_APP_BACKEND_URL` variable in your .env.local file).
