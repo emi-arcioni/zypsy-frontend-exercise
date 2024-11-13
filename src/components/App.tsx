@@ -5,7 +5,8 @@ import CategoryButton from "./CategoryButton";
 import MenuToggle from "./MenuToggle";
 import Menu from "./Menu";
 import useCategory from "../hooks/useCategory";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { toast } from "react-toastify";
 import { Post } from "../types/Post.type";
 import Loading from "./Loading";
 
@@ -28,9 +29,12 @@ function App() {
             dayjs(a.date).toDate().getTime() - dayjs(b.date).toDate().getTime()
         );
         setPosts(sortedPosts);
-        setLoading(false);
       } catch (err) {
-        console.log("Posts couldn't be loaded");
+        if (err instanceof AxiosError) {
+          toast.error(`Posts couldn't be loaded: ${err.message}`);
+        }
+      } finally {
+        setLoading(false);
       }
     };
 

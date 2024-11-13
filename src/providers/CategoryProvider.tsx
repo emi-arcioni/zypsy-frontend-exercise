@@ -9,7 +9,8 @@ import {
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Category } from "../types/Category.type";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export const CategoryContext = createContext<{
   activeCategory: Category | undefined;
@@ -50,7 +51,9 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
         )
       );
     } catch (err) {
-      console.log("Favorite couldn't be updated");
+      if (err instanceof AxiosError) {
+        toast.error(`Favorite couldn't be updated: ${err.message}`);
+      }
     }
   };
 
@@ -68,11 +71,16 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/categories`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/categories`
+        );
         setCategories(response.data);
-        setLoading(false);
       } catch (err) {
-        console.log("Categories couldn't be loaded");
+        if (err instanceof AxiosError) {
+          toast.error(`Categories couldn't be loaded: ${err.message}`);
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
