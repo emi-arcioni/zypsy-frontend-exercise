@@ -39,3 +39,9 @@ $ npm test
 
 ### Important
 In order for the frontend to work properly, the backend app must be running at http://localhost:9000 (or at the URL specified by the `REACT_APP_BACKEND_URL` variable in your .env.local file).
+
+### Starting the backend
+
+The project requires **node >=18.19**, so check if you have the correct version. Install yarn globally `npm install -g yarn`, then install the dependencies with `yarn` on the backend folder.
+
+Run `yarn` in backend folder to install dependencies. Run the server with `yarn start`. The API is served at [http://localhost:9000](http://localhost:9000/), and you can go to `/docs` to explore the API documentation.
