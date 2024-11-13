@@ -9,7 +9,12 @@ export default function TestWrapper({
   children: React.ReactNode;
 }) {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_relativeSplatPath: true,
+        v7_startTransition: true,
+      }}
+    >
       <CategoryProvider>{children}</CategoryProvider>
     </BrowserRouter>
   );
