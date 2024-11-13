@@ -4,32 +4,59 @@ by Emilio Arcioni
 
 ## Considerations
 
-- When the user clicks on a category star, a PUT request will be made to toggle the favorite status of that category. This might feel awkward from a UX perspective, as all users consuming the API will see the same favorite statuses.
+- When a user clicks a category star, a PUT request is made to toggle the favorite status of that category. This approach may create a suboptimal UX, as all users accessing the API will see the same favorite statuses.
 
-- A better option might have been to use localStorage to store the user's favorites. However, I thought it would be a good opportunity to take advantage of the existing PUT endpoint for categories.
+- An alternative could have been using `localStorage` to store user-specific favorites. However, I chose to leverage the existing PUT endpoint for categories to explore its functionality.
 
 - Due to time constraints, testing is minimal, with only a basic `<App />` test included.
 
----
+## Running Instructions  - without Docker
 
-## Running Instructions
+### Backend (provided by Zypsy)
 
-Copy the file `.env.example` to `.env.local`, and feel free to modify the value of `REACT_APP_BACKEND_URL` to match the value where the backend server is running.
+Requirements:
+- node >= 18.19
+- yarn
 
-#### Install dependencies
+1. Install `yarn` globally on your system (if it isn't already installed)
+    ```bash
+    npm install -g yarn
+    ```
 
-```bash
-$ npm install
-```
+1. Install dependencies in the `backend` folder
+    ```bash
+    yarn install
+    ```
 
-#### Start the app
+1. Start the backend
+    ```bash
+    yarn start
+    ```
 
-```bash
-$ npm start
-```
+1. The API is served at [http://localhost:9000](http://localhost:9000/), and you can go to `/docs` to explore the API documentation.
 
-Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-The page will reload if you make edits. You will also see any lint errors in the console.
+### Frontend
+
+Requirements:
+- node >= 20.18
+- npm
+
+1. Within the `frontend` folder, copy `.env.example` to `.env.local`. (You can modify `REACT_APP_BACKEND_URL` if needed to match the backend server URL).
+    ```bash
+    cp .env.example .env.local
+    ```
+
+1. Install dependencies in the `frontend` folder
+    ```bash
+    npm install
+    ```
+
+1. Start the app
+    ```bash
+    npm start
+    ```
+    
+1. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 #### Run tests
 
@@ -37,11 +64,14 @@ The page will reload if you make edits. You will also see any lint errors in the
 $ npm test
 ```
 
-### Important
-In order for the frontend to work properly, the backend app must be running at http://localhost:9000 (or at the URL specified by the `REACT_APP_BACKEND_URL` variable in your .env.local file).
+## Running Instructions - with Docker
 
-### Starting the backend
+Requirements:
+- Docker
 
-The project requires **node >=18.19**, so check if you have the correct version. Install yarn globally `npm install -g yarn`, then install the dependencies with `yarn` on the backend folder.
+1. Run `docker compose` within the root folder of the app
 
-Run `yarn` in backend folder to install dependencies. Run the server with `yarn start`. The API is served at [http://localhost:9000](http://localhost:9000/), and you can go to `/docs` to explore the API documentation.
+    ```bash
+    docker compose up --build
+    ```
+1. Once the containers are up and running, open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
